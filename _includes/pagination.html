@@ -1,0 +1,62 @@
+{%- comment -%}
+  分页导航。依赖 jekyll-paginate 提供的 paginator 对象。
+
+  自守卫：没有 paginator、或只有一页时什么都不输出，所以可以放心在任何
+  地方 include，不用在外面再套一层 if。
+
+  页码链接按 _config.yml 里的 paginate_path 拼出来，第 1 页固定是站点根目录
+  （和 jekyll-paginate 的 Pager.paginate_path 行为一致）。
+{%- endcomment -%}
+{%- assign cur = paginator.page | default: 0 %}
+{%- assign total = paginator.total_pages | default: 0 %}
+
+{%- if total > 1 %}
+{%- assign window = 2 %}
+
+<nav class="pager" aria-label="分页导航">
+
+  {%- if paginator.previous_page %}
+  <a class="pager__btn" href="{{ paginator.previous_page_path | relative_url }}" rel="prev">← 上一页</a>
+  {%- else %}
+  <span class="pager__btn is-disabled" aria-disabled="true">← 上一页</span>
+  {%- endif %}
+
+  <span class="pager__nums">
+    {%- assign prev = 0 %}
+    {%- for i in (1..total) %}
+      {%- assign show = false %}
+      {%- if total <= 7 %}{% assign show = true %}{% endif %}
+      {%- if i == 1 or i == total %}{% assign show = true %}{% endif %}
+      {%- assign lo = cur | minus: window %}
+      {%- assign hi = cur | plus: window %}
+      {%- if i >= lo and i <= hi %}{% assign show = true %}{% endif %}
+
+      {%- if show %}
+        {%- assign prev_next = prev | plus: 1 %}
+        {%- if prev != 0 and i != prev_next %}
+        <span class="pager__gap">…</span>
+        {%- endif %}
+        {%- if i == 1 %}
+          {%- assign purl = '/' %}
+        {%- else %}
+          {%- assign purl = site.paginate_path | replace: ':num', i %}
+        {%- endif %}
+        {%- if i == cur %}
+        <span class="pager__num is-current" aria-current="page">{{ i }}</span>
+        {%- else %}
+        <a class="pager__num" href="{{ purl | relative_url }}">{{ i }}</a>
+        {%- endif %}
+        {%- assign prev = i %}
+      {%- endif %}
+    {%- endfor %}
+  </span>
+
+  {%- if paginator.next_page %}
+  <a class="pager__btn" href="{{ paginator.next_page_path | relative_url }}" rel="next">下一页 →</a>
+  {%- else %}
+  <span class="pager__btn is-disabled" aria-disabled="true">下一页 →</span>
+  {%- endif %}
+
+</nav>
+
+{%- endif %}

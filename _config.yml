@@ -1,0 +1,93 @@
+# --- 基本信息 ---
+title: 我的个人博客
+tagline: 记录技术与生活
+description: >-
+  算法竞赛、工程实践与日常踩坑的笔记归档。
+lang: zh-CN
+
+url: "https://pengpeng002.github.io"
+baseurl: ""
+
+# --- 作者信息 ---
+author:
+  name: pengpeng002
+  avatar: /assets/img/avatar.svg 
+  bio: 记录技术与生活
+
+# --- 左侧导航 ---
+nav:
+  - title: 首页
+    url: /
+    icon: home
+  - title: 分类
+    url: /categories/
+    icon: list
+  - title: 标签
+    url: /tags/
+    icon: tag
+  - title: 归档
+    url: /archives/
+    icon: archive
+  - title: 关于
+    url: /about/
+    icon: user
+
+# --- 联系方式 ---
+social:
+  github: pengpeng002
+  email: "2953155869@qq.com"
+
+# --- 页脚 ---
+footer:
+  copyright: "pengpeng"
+  credit: "Built with Jekyll"
+
+permalink: /posts/:year/:month/:day/:title/
+
+# --- 右侧栏 ---
+panel:
+  recent_count: 5  
+  tag_limit: 20 
+
+
+paginate: 10
+paginate_path: "/page/:num/"
+
+
+group_page_size: 30
+
+
+analytics:
+  provider: busuanzi
+  google_id: ""
+
+
+plugins:
+  - jekyll-paginate
+
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+    block:
+      line_numbers: false
+
+sass:
+  style: compressed
+
+# 不参与构建的文件
+exclude:
+  - README.md
+
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post

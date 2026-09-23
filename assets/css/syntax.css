@@ -1,0 +1,90 @@
+/* ============================================================
+   syntax.css — Rouge 代码高亮（GitHub 风格）
+   配合 kramdown + rouge 使用，类名由 rouge 生成
+   ============================================================ */
+
+.highlight { background: var(--bg-code); }
+.highlight .hll { background-color: #fffbdd; }
+
+/* 注释 */
+.highlight .c, .highlight .c1, .highlight .cm, .highlight .cs, .highlight .cd,
+.highlight .cp, .highlight .cpf { color: #6a737d; font-style: italic; }
+
+/* 关键字 */
+.highlight .k, .highlight .kc, .highlight .kd, .highlight .kn, .highlight .kp,
+.highlight .kr, .highlight .kt { color: #d73a49; }
+
+/* 运算符 / 标点 */
+.highlight .o, .highlight .ow, .highlight .p { color: #24292e; }
+
+/* 名字 */
+.highlight .n  { color: #24292e; }
+.highlight .na { color: #6f42c1; }   /* attribute */
+.highlight .nb { color: #005cc5; }   /* builtin */
+.highlight .nc { color: #6f42c1; }   /* class */
+.highlight .nd { color: #6f42c1; }   /* decorator */
+.highlight .ne { color: #d73a49; }   /* exception */
+.highlight .nf { color: #6f42c1; }   /* function */
+.highlight .ni { color: #24292e; }
+.highlight .nl { color: #005cc5; }   /* label */
+.highlight .nn { color: #24292e; }
+.highlight .no { color: #005cc5; }   /* constant */
+.highlight .nt { color: #22863a; }   /* tag */
+.highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi, .highlight .vm
+  { color: #e36209; }
+
+/* 数字 */
+.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi,
+.highlight .mo, .highlight .il { color: #005cc5; }
+
+/* 字符串 */
+.highlight .s, .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc,
+.highlight .sd, .highlight .se, .highlight .sh, .highlight .si, .highlight .sr,
+.highlight .ss, .highlight .sx, .highlight .dl, .highlight .sa { color: #032f62; }
+
+/* 其它 */
+.highlight .err { color: #b31d28; background: #ffeef0; }
+.highlight .w  { color: #586069; }
+.highlight .ge { font-style: italic; }
+.highlight .gs { font-weight: 700; }
+.highlight .gh { color: #005cc5; font-weight: 700; }
+.highlight .gu { color: #6f42c1; font-weight: 700; }
+.highlight .gd { color: #b31d28; background: #ffeef0; }
+.highlight .gi { color: #22863a; background: #f0fff4; }
+
+/* 行号 */
+.highlight .lineno, .highlight .gl { color: #aeb3b7; user-select: none; }
+
+@media (prefers-color-scheme: dark) {
+  .highlight .hll { background-color: #2b2a1f; }
+
+  .highlight .c, .highlight .c1, .highlight .cm, .highlight .cs, .highlight .cd,
+  .highlight .cp, .highlight .cpf { color: #8b949e; }
+
+  .highlight .k, .highlight .kc, .highlight .kd, .highlight .kn, .highlight .kp,
+  .highlight .kr, .highlight .kt, .highlight .ne { color: #ff7b72; }
+
+  .highlight .o, .highlight .ow, .highlight .p,
+  .highlight .n, .highlight .ni, .highlight .nn { color: #c9d1d9; }
+
+  .highlight .na, .highlight .nc, .highlight .nd, .highlight .nf, .highlight .gu
+    { color: #d2a8ff; }
+
+  .highlight .nb, .highlight .nl, .highlight .no,
+  .highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi,
+  .highlight .mo, .highlight .il { color: #79c0ff; }
+
+  .highlight .nt, .highlight .gi { color: #7ee787; }
+  .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi, .highlight .vm
+    { color: #ffa657; }
+
+  .highlight .s, .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc,
+  .highlight .sd, .highlight .se, .highlight .sh, .highlight .si, .highlight .sr,
+  .highlight .ss, .highlight .sx, .highlight .dl, .highlight .sa { color: #a5d6ff; }
+
+  .highlight .err { color: #ffa198; background: #490202; }
+  .highlight .gd { color: #ffa198; background: #490202; }
+  .highlight .gi { background: #04260f; }
+  .highlight .gh { color: #79c0ff; }
+  .highlight .lineno, .highlight .gl { color: #6c7378; }
+}

@@ -1,0 +1,10 @@
+<footer class="footer">
+  <p>
+    {%- if site.footer.copyright and site.footer.copyright != "" -%}
+      {{ site.footer.copyright }}
+    {%- else -%}
+      © {{ site.time | date: "%Y" }} {{ site.author.name }}
+    {%- endif -%}
+  </p>
+  <p>{{ site.footer.credit }}</p>
+</footer>

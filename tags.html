@@ -1,0 +1,77 @@
+---
+layout: page
+title: 标签
+permalink: /tags/
+lead: 上面是所有标签，下面按标签把文章列出来。
+---
+
+{%- comment -%}
+  结构和 categories.html 完全一致，只是分组维度换成标签：
+  默认 = 标签云 + 按标签分组的文章列表；点标签进入 /tags/#标签名 的聚焦视图。
+
+  一篇文章有多个标签时会在多个分组里各出现一次，所以这一页的总条数
+  比文章数多 —— 这是「按标签分组」的固有代价。
+{%- endcomment -%}
+
+{%- assign bucket = "" %}
+{%- for t in site.tags %}
+{%- assign pad = t.last.size | prepend: "0000" | slice: -4, 4 %}
+{%- assign piece = pad | append: "@" | append: t.first %}
+{%- if forloop.first %}
+{%- assign bucket = piece %}
+{%- else %}
+{%- assign bucket = bucket | append: "||" | append: piece %}
+{%- endif %}
+{%- endfor %}
+{%- assign cloud = bucket | split: "||" | sort | reverse %}
+
+{%- assign group_page_size = site.group_page_size | default: 40 %}
+
+<div class="taxonomy" id="taxonomy" data-kind="tags" data-label="标签">
+
+  <p class="taxonomy__back" id="taxonomy-back" hidden>
+    <a href="{{ '/tags/' | relative_url }}">← 全部标签</a>
+  </p>
+
+  <div class="taxonomy__intro" id="taxonomy-intro">
+    <p class="taxonomy__summary">
+      共 <strong>{{ site.tags.size }}</strong> 个标签 ·
+      <strong>{{ site.posts.size }}</strong> 篇文章
+    </p>
+
+    <div class="tag-cloud tag-cloud--page">
+      {%- for entry in cloud %}
+      {%- assign parts = entry | split: "@" %}
+      {%- assign tag_name = parts[1] %}
+      <a class="tag-chip" href="#{{ tag_name | uri_escape }}">
+        {{- tag_name -}}
+        <span class="tag-chip__count">{{ parts[0] | plus: 0 }}</span>
+      </a>
+      {%- endfor %}
+    </div>
+  </div>
+
+  <div class="taxonomy__groups" id="taxonomy-groups">
+    {%- for entry in cloud %}
+    {%- assign parts = entry | split: "@" %}
+    {%- assign tag_name = parts[1] %}
+    {%- assign tag_posts = site.tags[tag_name] %}
+    <section class="tax-group" data-name="{{ tag_name | escape }}">
+      <h2 class="section-title">
+        <span>{{ tag_name }}</span>
+        <span class="section-title__count">{{ tag_posts.size }} 篇</span>
+      </h2>
+      <ul class="entry-list" data-page-size="{{ group_page_size }}">
+        {%- for post in tag_posts %}
+        <li>
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        </li>
+        {%- endfor %}
+      </ul>
+      <nav class="pager" data-pager hidden aria-label="{{ tag_name }} 内的分页"></nav>
+    </section>
+    {%- endfor %}
+  </div>
+
+</div>

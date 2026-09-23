@@ -1,0 +1,84 @@
+---
+layout: page
+title: 分类
+permalink: /categories/
+lead: 上面是所有分类，下面按分类把文章列出来。
+---
+
+{%- comment -%}
+  结构说明
+  --------
+  默认视图 = 所有分类卡片 + 按分类分组的文章列表（每篇文章只渲染一次）。
+  点卡片会跳到 /categories/#分类名，进入「只看这一个分类」的聚焦视图：
+  上面那排卡片和其他分组都收起来，只留目标分组，并出现一个「← 全部分类」。
+
+  为什么不给聚焦视图单独渲染一份列表：那样每篇文章要渲染两遍，页面直接翻倍。
+  这里只是切显隐，所以 DOM 里只有一份。
+
+  排序：site.categories 是 Hash，Liquid 对 Hash 的 sort 行为不确定，
+  所以先把「数量补成 4 位的前缀 + @ + 名称」拼成字符串，split 成数组再 sort，
+  全程只操作数组，结果稳定。
+{%- endcomment -%}
+
+{%- assign bucket = "" %}
+{%- for c in site.categories %}
+{%- assign pad = c.last.size | prepend: "0000" | slice: -4, 4 %}
+{%- assign piece = pad | append: "@" | append: c.first %}
+{%- if forloop.first %}
+{%- assign bucket = piece %}
+{%- else %}
+{%- assign bucket = bucket | append: "||" | append: piece %}
+{%- endif %}
+{%- endfor %}
+{%- assign cloud = bucket | split: "||" | sort | reverse %}
+
+{%- assign group_page_size = site.group_page_size | default: 40 %}
+
+<div class="taxonomy" id="taxonomy" data-kind="categories" data-label="分类">
+
+  <p class="taxonomy__back" id="taxonomy-back" hidden>
+    <a href="{{ '/categories/' | relative_url }}">← 全部分类</a>
+  </p>
+
+  <div class="taxonomy__intro" id="taxonomy-intro">
+    <p class="taxonomy__summary">
+      共 <strong>{{ site.categories.size }}</strong> 个分类 ·
+      <strong>{{ site.posts.size }}</strong> 篇文章
+    </p>
+
+    <div class="cat-grid">
+      {%- for entry in cloud %}
+      {%- assign parts = entry | split: "@" %}
+      {%- assign cat_name = parts[1] %}
+      <a class="cat-card" href="#{{ cat_name | uri_escape }}">
+        <span class="cat-card__name">{% include icon.html name="folder" %}{{ cat_name }}</span>
+        <span class="cat-card__count">{{ parts[0] | plus: 0 }} 篇</span>
+      </a>
+      {%- endfor %}
+    </div>
+  </div>
+
+  <div class="taxonomy__groups" id="taxonomy-groups">
+    {%- for entry in cloud %}
+    {%- assign parts = entry | split: "@" %}
+    {%- assign cat_name = parts[1] %}
+    {%- assign cat_posts = site.categories[cat_name] %}
+    <section class="tax-group" data-name="{{ cat_name | escape }}">
+      <h2 class="section-title">
+        <span>{{ cat_name }}</span>
+        <span class="section-title__count">{{ cat_posts.size }} 篇</span>
+      </h2>
+      <ul class="entry-list" data-page-size="{{ group_page_size }}">
+        {%- for post in cat_posts %}
+        <li>
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        </li>
+        {%- endfor %}
+      </ul>
+      <nav class="pager" data-pager hidden aria-label="{{ cat_name }} 内的分页"></nav>
+    </section>
+    {%- endfor %}
+  </div>
+
+</div>

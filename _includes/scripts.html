@@ -1,0 +1,26 @@
+<button class="to-top" id="to-top" type="button" aria-label="回到顶部" title="回到顶部">
+  {% include icon.html name="arrow-up" %}
+</button>
+
+{%- comment -%}
+  代码块复制按钮的模板。JS 复制一份插到每个代码块右上角，
+  图标在这里由 Liquid 渲染，避免在 JS 里重复写一遍 SVG。
+{%- endcomment -%}
+<template id="tpl-code-copy">
+  <button class="code-copy" type="button" aria-label="复制代码" title="复制代码">
+    <span class="code-copy__ico code-copy__ico--copy">{% include icon.html name="copy" %}</span>
+    <span class="code-copy__ico code-copy__ico--done">{% include icon.html name="check" %}</span>
+    <span class="code-copy__label">复制</span>
+  </button>
+</template>
+
+<script>
+  window.BLOG_SEARCH_INDEX = "{{ '/search.json' | relative_url }}";
+  window.BLOG_SEARCH_PAGE = "{{ '/search/' | relative_url }}";
+  window.BLOG_POSTS_ORDER = "{{ '/posts-order.json' | relative_url }}";
+  window.BLOG_BASE = "{{ '/' | relative_url }}";
+  window.BLOG_GROUP_PAGE_SIZE = {{ site.group_page_size | default: 40 }};
+</script>
+<script src="{{ '/assets/js/main.js' | relative_url }}" defer></script>
+
+{% include analytics.html %}

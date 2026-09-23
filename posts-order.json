@@ -1,0 +1,17 @@
+---
+layout: none
+permalink: /posts-order.json
+---
+
+{%- comment -%}
+  只给文章页的「上一篇 / 下一篇」用：按 site.posts 的顺序（时间倒序）
+  列出每篇文章的 url / title / 分类 / 标签。
+
+  为什么不直接复用 search.json：那个带 description 和 500 字正文，约 85KB；
+  这里只有 13KB，而且每次打开文章页都会请求一次，越小越好。
+{%- endcomment -%}
+[
+{%- for post in site.posts %}
+{"url": {{ post.url | relative_url | jsonify }},"title": {{ post.title | jsonify }},"categories": {{ post.categories | jsonify }},"tags": {{ post.tags | jsonify }}}{% unless forloop.last %},{% endunless %}
+{%- endfor %}
+]

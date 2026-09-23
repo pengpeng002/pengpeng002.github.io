@@ -1,0 +1,66 @@
+<aside class="panel">
+
+  <section class="panel__block">
+    <h2 class="panel__title">最近更新</h2>
+    <ul class="panel__list">
+      {%- assign recent_n = site.panel.recent_count | default: 5 %}
+      {%- for post in site.posts %}
+      {%- if forloop.index > recent_n %}{% break %}{% endif %}
+      <li>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
+      </li>
+      {%- endfor %}
+    </ul>
+  </section>
+
+  {%- if site.tags.size > 0 %}
+  <section class="panel__block">
+    <h2 class="panel__title">热门标签</h2>
+    <div class="tag-cloud">
+      {%- comment -%}
+        按文章数从多到少排：把数量补成 4 位数字前缀后拼接排序，
+        这样不必依赖额外的排序插件。
+        拼接时不在末尾留分隔符，否则 split 会多出一个空串。
+      {%- endcomment -%}
+      {%- assign bucket = "" %}
+      {%- for tag in site.tags %}
+      {%- assign pad = tag.last.size | prepend: "0000" | slice: -4, 4 %}
+      {%- assign piece = pad | append: "@" | append: tag.first %}
+      {%- if forloop.first %}
+      {%- assign bucket = piece %}
+      {%- else %}
+      {%- assign bucket = bucket | append: "||" | append: piece %}
+      {%- endif %}
+      {%- endfor %}
+      {%- assign entries = bucket | split: "||" | sort | reverse %}
+      {%- assign tag_limit = site.panel.tag_limit | default: 20 %}
+      {%- for entry in entries %}
+      {%- if forloop.index > tag_limit %}{% break %}{% endif %}
+      {%- assign parts = entry | split: "@" %}
+      {%- assign tag_name = parts[1] %}
+      {%- assign tag_count = parts[0] | plus: 0 %}
+      <a class="tag-chip" href="{{ '/tags/' | relative_url }}#{{ tag_name | uri_escape }}">
+        {{- tag_name -}}
+        <span class="tag-chip__count">{{ tag_count }}</span>
+      </a>
+      {%- endfor %}
+    </div>
+  </section>
+  {%- endif %}
+
+  {%- comment -%}
+    访问量。数字由不蒜子异步填进 #busuanzi_value_*，所以先放一个占位符
+    「–」，main.js 的 initAnalytics 拿到数字后替换掉。
+    这里刻意不做「拿不到就隐藏」—— 藏起来会让人以为没做这个功能。
+    换成别的统计服务或者关掉时，这块根本不会渲染。
+  {%- endcomment -%}
+  {%- if site.analytics.provider == "busuanzi" %}
+  <section class="panel__block" id="busuanzi-block">
+    <h2 class="panel__title">访问量</h2>
+    <p class="stat-line">总访问 <strong id="busuanzi_value_site_pv">–</strong> 次</p>
+    <p class="stat-line">访客 <strong id="busuanzi_value_site_uv">–</strong> 人</p>
+  </section>
+  {%- endif %}
+
+</aside>

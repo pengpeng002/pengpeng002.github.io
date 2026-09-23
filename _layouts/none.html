@@ -1,0 +1,8 @@
+{%- comment -%}
+  透传布局，什么都不加，只输出内容本身。
+  给 search.json 这类「必须是纯文本」的文件用：
+  GitHub Pages 会自动启用 jekyll-default-layout，而它对 `layout: null`
+  的处理不可靠（可能强行套上 default 布局，把 JSON 包进 HTML 里）。
+  写 `layout: none` 并让这个布局只输出 {{ content }}，两种情况都不会出错。
+{%- endcomment -%}
+{{ content }}

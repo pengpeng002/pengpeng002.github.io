@@ -1,0 +1,79 @@
+---
+layout: default
+---
+<article class="post">
+  <header class="post__header">
+    <h1 class="post__title">{{ page.title }}</h1>
+
+    <div class="post__meta">
+      <span>
+        {% include icon.html name="calendar" %}
+        <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y-%m-%d" }}</time>
+      </span>
+
+      {%- for cat in page.categories %}
+      <a href="{{ '/categories/' | relative_url }}#{{ cat | uri_escape }}">
+        {% include icon.html name="folder" %}{{ cat }}
+      </a>
+      {%- endfor %}
+
+      {%- comment -%}中文按词统计没意义，这里用字符数{%- endcomment -%}
+      {%- assign char_count = content | strip_html | strip_newlines | strip | size %}
+      <span>{% include icon.html name="file-text" %}约 {{ char_count }} 字</span>
+
+      {%- comment -%}
+        本页阅读量（不蒜子的 page_pv 就是按页面 URL 计的，所以每篇文章一个数）。
+        数字是异步填进来的，先放占位符，main.js 的 initAnalytics 拿到后替换。
+      {%- endcomment -%}
+      {%- if site.analytics.provider == "busuanzi" %}
+      <span id="busuanzi-page-pv">
+        {% include icon.html name="eye" %}阅读 <b id="busuanzi_value_page_pv">–</b> 次
+      </span>
+      {%- endif %}
+    </div>
+
+    {%- if page.tags and page.tags.size > 0 %}
+    <div class="post__tags">
+      {%- for tag in page.tags %}
+      <a class="tag-chip" href="{{ '/tags/' | relative_url }}#{{ tag | uri_escape }}">{{ tag }}</a>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+  </header>
+
+  <div class="article">
+    {{ content }}
+  </div>
+</article>
+
+{%- comment -%}
+  上一篇 / 下一篇。
+
+  这里的顺序和「列表页从上往下看」一致：← 上一篇 是列表里更靠上的那篇。
+  因为 site.posts 是时间倒序（新的在前），所以
+  「更靠上」= 更新的一篇 = page.next，「更靠下」= 更早的一篇 = page.previous。
+  首页、归档页的顺序就是 site.posts 顺序，所以服务端渲染的这份默认值
+  对它们来说已经是对的。
+
+  从某个分类 / 标签页点进来时，顺序应该换成那个分组里的顺序，
+  由 main.js 的 initPostNav 读 /posts-order.json 改写。
+  data-url 是给 JS 用来在列表里定位当前文章的（用 Jekyll 自己的 url 写法，
+  避免和浏览器编码过的 location.pathname 对不上）。
+{%- endcomment -%}
+{%- if page.previous or page.next %}
+<nav class="post-nav" id="post-nav" data-url="{{ page.url | relative_url }}" aria-label="上下篇">
+  {%- if page.next %}
+  <a class="post-nav__item" href="{{ page.next.url | relative_url }}">
+    <span class="post-nav__label">← 上一篇</span>
+    <span class="post-nav__title">{{ page.next.title }}</span>
+  </a>
+  {%- else %}<span></span>{% endif %}
+
+  {%- if page.previous %}
+  <a class="post-nav__item post-nav__item--next" href="{{ page.previous.url | relative_url }}">
+    <span class="post-nav__label">下一篇 →</span>
+    <span class="post-nav__title">{{ page.previous.title }}</span>
+  </a>
+  {%- endif %}
+</nav>
+{%- endif %}

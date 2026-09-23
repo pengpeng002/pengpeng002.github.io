@@ -1,0 +1,32 @@
+---
+layout: page
+title: 归档
+permalink: /archives/
+lead: 全部文章按年份倒序排列。
+---
+
+{%- assign groups = site.posts | group_by_exp: "post", "post.date | date: '%Y'" -%}
+
+{%- if groups.size == 0 %}
+<p class="empty">还没有文章。</p>
+{%- else %}
+
+{%- for group in groups %}
+<h2 class="section-title">
+  {{ group.name }}
+  <span class="section-title__count">{{ group.items.size }} 篇</span>
+</h2>
+<ul class="entry-list">
+  {%- for post in group.items %}
+  <li>
+    <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%m-%d" }}</time>
+    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    {%- if post.categories and post.categories.size > 0 %}
+    <span class="entry-list__count">{{ post.categories.first }}</span>
+    {%- endif %}
+  </li>
+  {%- endfor %}
+</ul>
+{%- endfor %}
+
+{%- endif %}

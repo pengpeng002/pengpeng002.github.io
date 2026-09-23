@@ -1,0 +1,31 @@
+{%- assign p = include.post -%}
+{%- assign excerpt = p.description | default: p.excerpt | strip_html | strip_newlines | strip -%}
+<article class="card">
+  <div class="card__body">
+    <h2 class="card__title">
+      <a href="{{ p.url | relative_url }}">{{ p.title }}</a>
+    </h2>
+
+    {%- if excerpt != "" %}
+    <p class="card__excerpt">{{ excerpt | truncate: 150 }}</p>
+    {%- endif %}
+
+    <div class="card__meta">
+      <span>{% include icon.html name="calendar" %}<time datetime="{{ p.date | date_to_xmlschema }}">{{ p.date | date: "%Y-%m-%d" }}</time></span>
+
+      {%- for cat in p.categories %}
+      <a href="{{ '/categories/' | relative_url }}#{{ cat | uri_escape }}">{% include icon.html name="folder" %}{{ cat }}</a>
+      {%- endfor %}
+
+      {%- if p.pinned %}
+      <span class="card__pin" title="置顶">{% include icon.html name="bookmark" %}</span>
+      {%- endif %}
+    </div>
+  </div>
+
+  {%- if p.image %}
+  <div class="card__thumb">
+    <img src="{{ p.image | relative_url }}" alt="{{ p.title | escape }}" loading="lazy">
+  </div>
+  {%- endif %}
+</article>

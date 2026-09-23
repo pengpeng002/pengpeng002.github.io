@@ -1,0 +1,56 @@
+<header class="topbar">
+
+  <button class="menu-btn" id="menu-btn" type="button" aria-label="打开导航" aria-expanded="false">
+    {% include icon.html name="menu" %}
+  </button>
+
+  {%- comment -%}
+    面包屑。
+
+    左侧导航里「首页 / 分类 / 标签 / 归档 / 关于」是平级的，所以这几个
+    顶层页面不再加「首页 /」前缀，直接显示自己；只有真正有上下级关系时
+    才出现分隔符（首页的翻页、文章的「分类 / 分类名 / 标题」）。
+
+    文章页这里渲染的是「没有来源信息时」的默认形态，
+    assets/js/main.js 的 initCrumb 会按你是从哪个列表页点进来的改写它。
+  {%- endcomment -%}
+  <nav class="crumb" id="crumb" aria-label="面包屑"
+       data-kind="{{ page.layout | default: 'page' }}"
+       data-title="{{ page.title | escape }}"
+       data-category="{{ page.categories.first | escape }}"
+       data-tags="{{ page.tags | join: ',' | escape }}">
+    {%- assign pg_num = paginator.page | default: 1 %}
+    {%- if page.url == "/" %}
+    <span class="crumb__current">首页</span>
+    {%- elsif page.layout == "home" %}
+    <a href="{{ '/' | relative_url }}">首页</a>
+    <span class="crumb__sep">/</span>
+    <span class="crumb__current">第 {{ pg_num }} 页</span>
+    {%- elsif page.layout == "post" %}
+    {%- assign cat0 = page.categories.first %}
+    {%- if cat0 %}
+    <a href="{{ '/categories/' | relative_url }}">分类</a>
+    <span class="crumb__sep">/</span>
+    <a href="{{ '/categories/' | relative_url }}#{{ cat0 | uri_escape }}">{{ cat0 }}</a>
+    <span class="crumb__sep">/</span>
+    {%- else %}
+    <a href="{{ '/' | relative_url }}">首页</a>
+    <span class="crumb__sep">/</span>
+    {%- endif %}
+    <span class="crumb__current">{{ page.title }}</span>
+    {%- else %}
+    <span class="crumb__current">{{ page.title | default: "页面" }}</span>
+    {%- endif %}
+  </nav>
+
+  <form class="search" id="search" role="search"
+        action="{{ '/search/' | relative_url }}" method="get" autocomplete="off">
+    <label class="search__box" for="search-input">
+      {% include icon.html name="search" %}
+      <input class="search__input" id="search-input" type="search" name="q"
+             placeholder="搜索…" aria-label="搜索文章">
+    </label>
+    <div class="search__results" id="search-results" hidden></div>
+  </form>
+
+</header>

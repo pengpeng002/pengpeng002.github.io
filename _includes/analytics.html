@@ -1,0 +1,25 @@
+{%- comment -%}
+  访问量统计脚本。由 _config.yml 的 analytics.provider 控制：
+
+    ""         什么都不输出
+    busuanzi   不蒜子（不用注册，页面上直接显示 PV / UV）
+    google     Google Analytics 4（只在 GA 后台看报表）
+
+  数字是异步填进 DOM 的。页面上的位置会先渲染出占位符「–」，
+  main.js 的 initAnalytics 拿到数字后替换；15 秒还拿不到就标记成
+  is-stale（颜色变淡 + 悬停有说明），方便区分「服务没响应」和「功能没做」。
+{%- endcomment -%}
+{%- assign provider = site.analytics.provider | default: "" -%}
+
+{%- if provider == "busuanzi" %}
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+{%- elsif provider == "google" and site.analytics.google_id != "" %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.analytics.google_id | uri_escape }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', '{{ site.analytics.google_id }}');
+</script>
+{%- endif %}

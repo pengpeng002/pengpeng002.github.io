@@ -1,0 +1,15 @@
+---
+layout: default
+---
+
+{%- assign list = paginator.posts | default: site.posts %}
+
+{%- if list.size == 0 %}
+<p class="empty">这里还没有文章。</p>
+{%- else %}
+{%- for post in list %}
+{% include post-card.html post=post %}
+{%- endfor %}
+{%- endif %}
+
+{% include pagination.html %}

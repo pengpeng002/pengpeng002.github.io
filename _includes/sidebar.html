@@ -1,0 +1,43 @@
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar__inner">
+
+    <a class="sidebar__brand" href="{{ '/' | relative_url }}" aria-label="{{ site.title }}">
+      <img class="sidebar__avatar"
+           src="{{ site.author.avatar | relative_url }}"
+           alt="{{ site.author.name }}" width="92" height="92">
+    </a>
+
+    <p class="sidebar__name">{{ site.author.name }}</p>
+    <p class="sidebar__bio">{{ site.author.bio }}</p>
+
+    <nav class="nav" aria-label="站点导航">
+      {%- for item in site.nav %}
+      {%- assign is_active = false %}
+      {%- if page.url == item.url %}{% assign is_active = true %}{% endif %}
+      {%- if item.url != "/" and page.url contains item.url %}{% assign is_active = true %}{% endif %}
+      <a class="nav__item{% if is_active %} is-active{% endif %}"
+         href="{{ item.url | relative_url }}"{% if is_active %} aria-current="page"{% endif %}>
+        {% include icon.html name=item.icon %}
+        <span>{{ item.title }}</span>
+      </a>
+      {%- endfor %}
+    </nav>
+
+    <div class="sidebar__social">
+      {%- if site.social.github and site.social.github != "" %}
+      <a href="https://github.com/{{ site.social.github }}" target="_blank" rel="noopener"
+         aria-label="GitHub" title="GitHub">{% include icon.html name="github" %}</a>
+      {%- endif %}
+      {%- if site.social.email and site.social.email != "" %}
+      <a href="mailto:{{ site.social.email }}" aria-label="Email" title="Email">
+        {% include icon.html name="mail" %}</a>
+      {%- endif %}
+      <a href="{{ '/search/' | relative_url }}" aria-label="搜索" title="搜索">
+        {% include icon.html name="search" %}</a>
+      <a href="{{ '/archives/' | relative_url }}" aria-label="归档" title="归档">
+        {% include icon.html name="archive" %}</a>
+    </div>
+
+  </div>
+</aside>
+<div class="backdrop" id="backdrop"></div>

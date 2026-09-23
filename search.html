@@ -1,0 +1,15 @@
+---
+layout: page
+title: 搜索
+permalink: /search/
+lead: 在标题、标签、分类和正文里查找文章。
+---
+
+<form class="search-page" id="search-page-form" role="search"
+      action="{{ '/search/' | relative_url }}" method="get" autocomplete="off">
+  <input class="search-page__input" id="search-page-input" type="search" name="q"
+         placeholder="输入关键词，回车搜索…" autocomplete="off">
+</form>
+
+<p class="search-hint" id="search-page-hint"></p>
+<div id="search-page-results"></div>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'zh-CN' }}">
+<head>
+  {% include head.html %}
+</head>
+<body>
+  <div class="app">
+    {% include sidebar.html %}
+
+    <div class="main">
+      {% include topbar.html %}
+
+      <div class="columns">
+        <main class="content" id="content">
+          {{ content }}
+        </main>
+
+        {% include right-panel.html %}
+      </div>
+
+      {% include footer.html %}
+    </div>
+  </div>
+
+  {% include scripts.html %}
+</body>
+</html>
